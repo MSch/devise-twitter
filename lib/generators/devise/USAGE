@@ -1,0 +1,8 @@
+Description:
+    Generates for the model with the given NAME a migration file and devise-twitter routes.
+
+Example:
+    rails generate devise:twitter User
+
+    This will create:
+        what/will/it/create
