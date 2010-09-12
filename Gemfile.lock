@@ -1,0 +1,30 @@
+PATH
+  remote: .
+  specs:
+    devise-twitter (0.0.1)
+      devise (>= 1.1.0)
+      warden_oauth (~> 0.1.1)
+
+GEM
+  remote: http://rubygems.org/
+  specs:
+    bcrypt-ruby (2.1.2)
+    devise (1.1.2)
+      bcrypt-ruby (~> 2.1.2)
+      warden (~> 0.10.7)
+    oauth (0.4.3)
+    rack (1.2.1)
+    warden (0.10.7)
+      rack (>= 1.0.0)
+    warden_oauth (0.1.1)
+      oauth
+      warden (>= 0.8.1)
+
+PLATFORMS
+  ruby
+
+DEPENDENCIES
+  bundler (>= 1.0.0)
+  devise (>= 1.1.0)
+  devise-twitter!
+  warden_oauth (~> 0.1.1)
