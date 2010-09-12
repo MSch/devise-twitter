@@ -1,0 +1,40 @@
+module Devise
+  module Twitter
+    @@setup_done = false
+
+    mattr_accessor :consumer_key
+    @@consumer_key = nil
+
+    # Private methods to interface with Warden.
+    mattr_accessor :consumer_secret
+    @@consumer_secret = nil
+
+    mattr_accessor :scope
+    @@scope = nil
+
+    # Default way to setup Devise. Run rails generate devise_install to create
+    # a fresh initializer with all configuration values.
+    def self.setup
+      raise "Can not invoke setup twice" if @@setup_done
+      yield self
+      Devise.setup do |config|
+        config.warden do |manager|
+          manager.oauth(:twitter) do |twitter|
+            twitter.consumer_key  = @@consumer_key
+            twitter.consumer_secret = @@consumer_secret
+            twitter.options = {
+              :site => "https://api.twitter.com",
+              :request_token_path => "/oauth/request_token",
+              :access_token_path => "/oauth/access_token",
+              :authorize_path => "/oauth/authenticate",
+              :realm => "http://api.twitter.com/"
+            }
+          end
+          manager.default_strategies(:scope => @@scope).unshift :twitter_oauth
+        end
+      end
+      @@setup_done = true
+    end
+  end
+end
+
