@@ -18,6 +18,7 @@ Gem::Specification.new do |s|
   s.add_dependency "devise", ">= 1.1.0"
   s.add_dependency "warden_oauth", "~> 0.1.1"
   s.add_development_dependency "bundler", ">= 1.0.0"
+  s.add_development_dependency "rspec", "~> 2.0.0.beta"
 
   s.files        = `git ls-files`.split("\n")
   s.executables  = `git ls-files`.split("\n").map{|f| f =~ /^bin\/(.*)/ ? $1 : nil}.compact
