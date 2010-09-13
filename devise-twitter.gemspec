@@ -7,9 +7,9 @@ Gem::Specification.new do |s|
   s.platform    = Gem::Platform::RUBY
   s.authors     = ['Martin Schuerrer']
   s.email       = ['martin@schuerrer.org']
-  s.homepage    = "http://rubygems.org/gems/devise-twitter"
-  s.summary     = "Out of the box support for signing in via Twitter  and connecting an existing account to Twitter"
-  s.description = ""
+  s.homepage    = "http://github.com/MSch/devise-twitter"
+  s.summary     = "Sign in via Twitter and Connect your account to Twitter functionality for your Devise/Rails app"
+  s.description = "Check out the README for comprehensive documentation"
 
   s.required_rubygems_version = ">= 1.3.6"
   s.rubyforge_project         = "devise-twitter"
