@@ -12,6 +12,16 @@ module Devise
     mattr_accessor :scope
     @@scope = nil
 
+
+    mattr_accessor :twitter_handle_field
+    @@twitter_handle_field = "twitter_handle"
+    
+    mattr_accessor :twitter_oauth_token_field
+    @@twitter_oauth_token_field = "twitter_oauth_token"
+
+    mattr_accessor :twitter_oauth_secret_field
+    @@twitter_oauth_secret_field = "twitter_oauth_secret"
+
     # Default way to setup Devise. Run rails generate devise_install to create
     # a fresh initializer with all configuration values.
     def self.setup
