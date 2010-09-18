@@ -12,7 +12,7 @@ module Devise
 
           # Perform _only_ the twitter_oauth strategy.
           # Emulate _perform_authentication in _warden/proxy.rb
-          strategy = warden.send(:_fetch_strategy, :twitter_oauth, scope)
+          strategy = warden.send(:_fetch_strategy, :twitterable_oauth, scope)
           strategy.authenticate!
           if strategy.user
             warden.set_user(strategy.user, :event => :authentication, :scope => scope)
@@ -21,7 +21,7 @@ module Devise
           redirect_to Warden::OAuth::Utils.host_with_port(request)
         else
           # Perform the redirect to Twitter
-          strategy = warden.send(:_fetch_strategy, :twitter_oauth, scope)
+          strategy = warden.send(:_fetch_strategy, :twitterable_oauth, scope)
 
           # warden_oauth would always redirect to / so we need to hook into it
           request_token = strategy.consumer.get_request_token(:oauth_callback => request.url)
