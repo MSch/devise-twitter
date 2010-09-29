@@ -15,9 +15,9 @@ class AddDeviseTwitterFieldsTo<%= table_name.camelize %> < ActiveRecord::Migrati
     remove_index :<%= table_name %>, :column => [:twitter_oauth_token, :twitter_oauth_secret]
 
     change_table(:<%= table_name %>) do |t|
-      t.remove :twitter_handle, :string
-      t.remove :twitter_oauth_token, :string
-      t.remove :twitter_oauth_secret, :string
+      t.remove :twitter_handle
+      t.remove :twitter_oauth_token
+      t.remove :twitter_oauth_secret
     end
   end
 end
