@@ -6,18 +6,23 @@ Warden::OAuth.access_token_user_finder(:twitter) do |access_token|
 
   if perform_connect
     # Add twitter_handle to current user
-    already_existing_user = klass.find_by_twitter_handle(twitter_handle)
+    already_existing_user = klass.where(:twitter_id => twitter_id).first
     if already_existing_user.blank?
       # We don't know anyone with this handle, therefore continue with connecting
       user = @env['warden'].user
-      user.twitter_handle = twitter_handle
-      user.twitter_id = twitter_id if User.column_names.include? "twitter_id"
+      user.twitter_handle = twitter_handle if User.column_names.include? "twitter_handle"
+      user.twitter_id = twitter_id
       user.twitter_oauth_token = access_token.token
       user.twitter_oauth_secret = access_token.secret
       user.save
       return user
     else
       # We already have such a user in our DB
+      # We might need to update the twitter_handle if the user has changed it
+      if User.column_names.include?("twitter_handle") && twitter_handle != user.twitter_handle
+        user.twitter_handle = twitter_handle
+        user.save
+      end
       session["warden.#{@scope}.twitter.connected_user.key"] = already_existing_user.id
       return @env['warden'].user
     end
@@ -25,7 +30,7 @@ Warden::OAuth.access_token_user_finder(:twitter) do |access_token|
     previous_user = @env['warden'].user
 
     # Try to find user by token
-    user = klass.find_by_twitter_oauth_token_and_twitter_oauth_secret(access_token.token, access_token.secret)
+    user = klass.where(:twitter_oauth_token => access_token.token, :twitter_oauth_secret => access_token.secret).first
 
     # Since we are logging in a new user we want to make sure the before_logout hook is called
     @env['warden'].logout if previous_user.present?
@@ -33,11 +38,17 @@ Warden::OAuth.access_token_user_finder(:twitter) do |access_token|
     if user.nil?
       # Create user if we don't know him yet
       user = klass.new
-      user.twitter_handle = twitter_handle
-      user.twitter_id = twitter_id if User.column_names.include? "twitter_id"
+      user.twitter_handle = twitter_handle if User.column_names.include? "twitter_handle"
+      user.twitter_id = twitter_id
       user.twitter_oauth_token = access_token.token
       user.twitter_oauth_secret = access_token.secret
       user.save
+    else
+      # We might need to update the twitter_handle if the user has changed it
+      if User.column_names.include?("twitter_handle") && twitter_handle != user.twitter_handle
+        user.twitter_handle = twitter_handle
+        user.save
+      end
     end
 
     return user
