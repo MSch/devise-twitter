@@ -20,7 +20,7 @@ Installation
 
 Simply add devise-twitter to your Gemfile and bundle it up:
 
-    gem 'devise-twitter'
+    gem 'devise-twitter-amuino', :require => 'devise-twitter'
 
 Run the generator, supplying the name of the model (e.g. User)
 
@@ -75,7 +75,7 @@ Signing in via Twitter
 
 When signing in via Twitter, after authorizing access on www.twitter.com,
 devise-twitter will sign in an existing user or create a new one, if no user
-with these oauth credentials exists.
+with the same twitter id exists.
 
 
 Connect your account to Twitter
@@ -87,10 +87,10 @@ this feature is far from perfect:
 
 After navigating to `/user/connect/twitter` and authorizing access on
 www.twitter.com, devise-twitter checks if there is another user with the same
-twitter handle. If not devise-twitter adds twitter handle and oauth credentials
+twitter id. If not devise-twitter adds twitter handle and oauth credentials
 to the current user and saves.
 
-If another user with the same twitter handle is found devise-twitter sets the
+If another user with the same twitter id is found devise-twitter sets the
 session variable `warden.user.twitter.connected_user.key` to the id of this
 user. Your application can check if this variable is set and display an option
 to merge the two users.
@@ -110,11 +110,13 @@ Database changes
 The generated migration adds three fields to your user model:
 
     change_table(:users) do |t|
+      t.column :twitter_id, :integer
       t.column :twitter_handle, :string
       t.column :twitter_oauth_token, :string
       t.column :twitter_oauth_secret, :string
     end
 
+    add_index :users, :twitter_id, :unique => true
     add_index :users, :twitter_handle, :unique => true
     add_index :users, [:twitter_oauth_token, :twitter_oauth_secret]
 
