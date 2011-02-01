@@ -8,7 +8,7 @@ Warden::OAuth.access_token_user_finder(:twitter) do |access_token|
     already_existing_user = klass.find_by_twitter_handle(twitter_handle)
     if already_existing_user.blank?
       # We don't know anyone with this handle, therefore continue with connecting
-      user = @env['warden'].user
+      user = @env['warden'].user(@scope)
       user.twitter_handle = twitter_handle
       user.twitter_oauth_token = access_token.token
       user.twitter_oauth_secret = access_token.secret
@@ -17,10 +17,10 @@ Warden::OAuth.access_token_user_finder(:twitter) do |access_token|
     else
       # We already have such a user in our DB
       session["warden.#{@scope}.twitter.connected_user.key"] = already_existing_user.id
-      return @env['warden'].user
+      return @env['warden'].user(@scope)
     end
   else
-    previous_user = @env['warden'].user
+    previous_user = @env['warden'].user(@scope)
 
     # Try to find user by token
     user = klass.find_by_twitter_oauth_token_and_twitter_oauth_secret(access_token.token, access_token.secret)
